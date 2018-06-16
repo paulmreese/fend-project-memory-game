@@ -9,6 +9,7 @@ let isComparing = false;
 let cardArray = [];
 const board = document.querySelector(".deck");
 const cards = document.querySelectorAll(".card");
+const resetButton = document.querySelector(".restart");
 
 /*
  * Display the cards on the page
@@ -43,10 +44,10 @@ function shuffle(array) {
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 function initializePage() {
+  getMoveCount();
   cards.forEach(function(card) {
     card.classList.remove("open", "show", "match");
   });
-  getMoveCount();
   shuffleCards();
 }
 
@@ -62,7 +63,7 @@ function shuffleCards() {
 }
 
 function getMoveCount() {
-  document.querySelector('.moves').innerText = moveCount;
+  document.querySelector(".moves").innerText = moveCount;
 }
 
 function displayCard(e) {
@@ -71,12 +72,12 @@ function displayCard(e) {
 }
 
 function addToOpenList(e) {
-  listOfOpen += e.target.querySelector('i').className;
+  listOfOpen += e.target.querySelector("i").className;
 }
 
 function checkForMatch(e) {
-  if (e.target.querySelector('i').className == listOfOpen) {
-    document.querySelectorAll('.show').forEach(function(card) {
+  if (e.target.querySelector("i").className == listOfOpen) {
+    document.querySelectorAll(".show").forEach(function(card) {
       card.classList.add("match");
       card.classList.remove("show");
       checkVictory();
@@ -112,7 +113,16 @@ function checkVictory() {
   }
 }
 
-document.querySelector('.deck').addEventListener("click", function(e) {
+function resetCards() {
+  moveCount = 0;
+  getMoveCount();
+  cards.forEach(function(card) {
+    card.classList.remove("open", "show", "match");
+  });
+  shuffleCards();
+}
+
+board.addEventListener("click", function(e) {
   if (!isComparing && !e.target.classList.contains("cards")) {
     if (e.target.classList.contains("card") && !e.target.classList.contains("open")) {
       displayCard(e);
@@ -129,6 +139,10 @@ document.querySelector('.deck').addEventListener("click", function(e) {
       }
     }
   }
+});
+
+resetButton.addEventListener("click", function(){
+  resetCards();
 });
 
 initializePage();
