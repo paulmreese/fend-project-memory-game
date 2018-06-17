@@ -1,22 +1,15 @@
-/*
- * Create a list that holds all of your cards
- */
-let listOfOpen = [];
-let moveCount = 0;
-let firstFlip = "";
-let secondFlip = "";
-let isComparing = false;
-let cardArray = [];
+//Global Variables
+let listOfOpen = []; //List of "open" cards
+let moveCount = 0; //Number of moves taken
+let firstFlip = ""; //The first card flipped in a pair
+let secondFlip = ""; //The second card flipped
+let isComparing = false; //Shows true when two cards are face-up and don't match
+let cardArray = []; //Array list for node list. Needed for shuffle function
+
+//Elements
 const board = document.querySelector(".deck");
 const cards = document.querySelectorAll(".card");
 const resetButton = document.querySelector(".restart");
-
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -33,15 +26,10 @@ function shuffle(array) {
   return array;
 }
 
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
+//Function Definitions
+
+/* Sets up the game board by setting the move count on page and hiding
+ * the cards symbols. It then shuffles the board.
  */
 function initializePage() {
   getMoveCount();
@@ -51,9 +39,11 @@ function initializePage() {
   shuffleCards();
 }
 
+//Shuffles the cards and displays them
 function shuffleCards() {
   cardArray = [].slice.call(cards);;
   const newCards = shuffle(cardArray);
+  //As long as there is a card, remove it
   while (board.firstChild) {
     board.removeChild(board.firstChild);
   }
@@ -62,19 +52,23 @@ function shuffleCards() {
   });
 }
 
+//Sets the move count display
 function getMoveCount() {
   document.querySelector(".moves").innerText = moveCount;
 }
 
+//"flips" a card
 function displayCard(e) {
   e.target.classList.toggle("open");
   e.target.classList.toggle("show");
 }
 
+//saves the fa symbol from the card to check later
 function addToOpenList(e) {
   listOfOpen += e.target.querySelector("i").className;
 }
 
+//checks the most recently clicked card against the last card
 function checkForMatch(e) {
   if (e.target.querySelector("i").className == listOfOpen) {
     document.querySelectorAll(".show").forEach(function(card) {
@@ -83,18 +77,22 @@ function checkForMatch(e) {
       checkVictory();
     });
   } else {
+    //Set to true so that click event listeners won't fire
     isComparing = true;
+    //This allows the user time to look at the cards
     setTimeout(function() {
       firstFlip.classList.remove("show");
       firstFlip.classList.remove("open");
       secondFlip.classList.remove("show");
       secondFlip.classList.remove("open");
       firstFlip, secondFlip = "";
+      //Allow clicks
       isComparing = false;
     }, 1000);
   }
 }
 
+//Adjusts the star rating
 function adjustRating() {
   const oneStar = document.querySelector(".fa-star").parentNode;
   if (moveCount == 28) {
@@ -104,6 +102,7 @@ function adjustRating() {
   }
 }
 
+//Checks to see if all cards have been matched
 function checkVictory() {
   if (document.querySelectorAll(".match").length == 16) {
     setTimeout(function() {
@@ -113,6 +112,7 @@ function checkVictory() {
   }
 }
 
+//functionality for reset button
 function resetCards() {
   moveCount = 0;
   getMoveCount();
@@ -122,8 +122,16 @@ function resetCards() {
   shuffleCards();
 }
 
+//Event Listeners
 board.addEventListener("click", function(e) {
+  /* if statements nested for readability
+   * First statements make sure no previous pair is being displayed, then
+   * ensures that the click wasn't on the board itself.
+   */
   if (!isComparing && !e.target.classList.contains("cards")) {
+    /* Next statments make sure that we are clicking the card(not its symbol),
+     * and that the card is not open.
+     */
     if (e.target.classList.contains("card") && !e.target.classList.contains("open")) {
       displayCard(e);
       moveCount++;
@@ -145,4 +153,5 @@ resetButton.addEventListener("click", function(){
   resetCards();
 });
 
+//Function Call
 initializePage();
