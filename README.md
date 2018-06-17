@@ -32,5 +32,7 @@ For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
 ## Dependencies
 
 [BootStrap CDN](https://www.bootstrapcdn.com/) - for Font Awesome
+
 [Font Awesome](http://fontawesome.com) - All on-page symbols
+
 [Sweet Alert 2](https://sweetalert2.github.io/) - Victory notification
