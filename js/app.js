@@ -108,11 +108,16 @@ function checkVictory() {
   if (document.querySelectorAll(".match").length == 16) {
     pauseTimer();
     setTimeout(function() {
-      alert("Congratulations!!\nYou took " +
-      document.querySelector('.timer').innerText +
-      " to finish in " + moveCount + " moves!\n" + "That's a " +
-      document.querySelector(".stars").getElementsByTagName("li").length +
-      "-Star Win!\n");
+      const winTime = document.querySelector('.timer').innerText;
+      const winRank = document.querySelector(".stars").getElementsByTagName("li").length;
+      const victoryMessage = `You took ${winTime} to finish in ${moveCount} moves!`
+      const footerMessage = `That's a ${winRank}-Star Win!`;
+      swal({
+        title: 'Congratulations!!',
+        text: victoryMessage,
+        type: 'success',
+        footer: footerMessage
+      });
     }, 0);
   }
 }
