@@ -107,6 +107,11 @@ i {
     display: inline-block;
 }
 
+.timer {
+  float:right;
+  padding: 0 10px;
+}
+
 .score-panel .restart {
     float: right;
     cursor: pointer;

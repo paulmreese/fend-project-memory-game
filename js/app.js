@@ -37,6 +37,7 @@ function initializePage() {
     card.classList.remove("open", "show", "match");
   });
   shuffleCards();
+  startTimer();
 }
 
 //Shuffles the cards and displays them
@@ -105,9 +106,13 @@ function adjustRating() {
 //Checks to see if all cards have been matched
 function checkVictory() {
   if (document.querySelectorAll(".match").length == 16) {
+    pauseTimer();
     setTimeout(function() {
-      alert("Congratulations!!\nYou finished in " + moveCount + " moves!\n" +
-      "That's a " + document.querySelector(".stars").getElementsByTagName("li").length + "-Star Win!\n");
+      alert("Congratulations!!\nYou took " +
+      document.querySelector('.timer').innerText +
+      " to finish in " + moveCount + " moves!\n" + "That's a " +
+      document.querySelector(".stars").getElementsByTagName("li").length +
+      "-Star Win!\n");
     }, 0);
   }
 }
@@ -120,6 +125,35 @@ function resetCards() {
     card.classList.remove("open", "show", "match");
   });
   shuffleCards();
+  resetTimer();
+}
+
+//timer function modified from user Bakudan at
+//https://stackoverflow.com/questions/5517597/plain-count-up-timer-in-javascript
+let sec = 0;
+function pad (val) {
+  return val > 9 ? val : "0" + val;
+}
+
+let setTimeOnScreen = function(){
+  document.getElementById("seconds").innerHTML=pad(++sec%60);
+  document.getElementById("minutes").innerHTML=pad(parseInt(sec/60,10));
+}
+
+let intervalFunction = setInterval(setTimeOnScreen, 1000);
+
+function startTimer() {
+  intervalFunction;
+}
+
+function pauseTimer() {
+  clearInterval(intervalFunction);
+}
+
+function resetTimer() {
+  clearInterval(intervalFunction);
+  sec = 0;
+  intervalFunction = setInterval(setTimeOnScreen, 1000);
 }
 
 //Event Listeners
@@ -129,7 +163,7 @@ board.addEventListener("click", function(e) {
    * ensures that the click wasn't on the board itself.
    */
   if (!isComparing && !e.target.classList.contains("cards")) {
-    /* Next statments make sure that we are clicking the card(not its symbol),
+    /* Next statements make sure that we are clicking the card(not its symbol),
      * and that the card is not open.
      */
     if (e.target.classList.contains("card") && !e.target.classList.contains("open")) {
@@ -153,5 +187,5 @@ resetButton.addEventListener("click", function(){
   resetCards();
 });
 
-//Function Call
+//Function Calls
 initializePage();
