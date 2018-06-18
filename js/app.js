@@ -38,6 +38,7 @@ function initializePage() {
   });
   shuffleCards();
   startTimer();
+  setStars(3);
 }
 
 //Shuffles the cards and displays them
@@ -103,6 +104,14 @@ function adjustRating() {
   }
 }
 
+//Initializes 3-Star rating
+function setStars(num) {
+  const starRating = document.querySelector(".stars")
+  while (starRating.getElementsByTagName("li").length < num) {
+    starRating.innerHTML += '<li><i class="fa fa-star"></i></li>';
+  }
+}
+
 //Checks to see if all cards have been matched
 function checkVictory() {
   if (document.querySelectorAll(".match").length == 16) {
@@ -131,6 +140,7 @@ function resetCards() {
   });
   shuffleCards();
   resetTimer();
+  setStars(3);
 }
 
 //timer function modified from user Bakudan at
